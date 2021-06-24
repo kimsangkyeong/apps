@@ -1,0 +1,121 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ingress-bugbash
+  labels:
+     tenant: test
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: ingress-bugbash
+  name: echo2
+spec:
+  selector:
+    matchLabels:
+      app: echo2
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: echo2
+    spec:
+      containers:
+        - name: app
+          image: gcr.io/google-containers/echoserver:1.4
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: ingress-bugbash
+  name: echo2
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+  type: NodePort
+  selector:
+    app: echo2
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: ingress-bugbash
+  name: echo2
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/group.name: echo2048
+    alb.ingress.kubernetes.io/group.order: '1'
+    alb.ingress.kubernetes.io/subnets: subnet-0a41aa9b13ecc4cac, subnet-06093f279c3d2f91b
+spec:
+  rules:
+    - host: app1.biz-think.net
+      http:
+        paths:
+          - path: /echo
+            backend:
+              serviceName: echo2
+              servicePort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: ingress-bugbash
+  name: game-2048
+spec:
+  selector:
+    matchLabels:
+      app: game-2048
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: game-2048
+    spec:
+      containers:
+        - name: app
+          image: alexwhen/docker-2048
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: ingress-bugbash
+  name: game-2048
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+  type: NodePort
+  selector:
+    app: game-2048
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: ingress-bugbash
+  name: game-2048
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/group.name: echo2048
+    alb.ingress.kubernetes.io/group.order: '2'
+    alb.ingress.kubernetes.io/subnets: subnet-0a41aa9b13ecc4cac, subnet-06093f279c3d2f91b
+spec:
+  rules:
+    - host: app2.biz-think.net
+      http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: game-2048
+              servicePort: 80

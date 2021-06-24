@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Pod
+metadata:
+    name: checkutils
+    labels:
+        cmd: busybox
+        network: dnsutils
+        curl: curl
+spec:
+    containers:
+    - image: docker.io/busybox 
+      name: busybox
+      command:
+          - sleep
+          - "3600"
+      imagePullPolicy: IfNotPresent
+    - image: gcr.io/kubernetes-e2e-test-images/dnsutils:1.3
+      name: dnsutils
+      command:
+          - sleep
+          - "3600"
+      imagePullPolicy: IfNotPresent
+    - image: curlimages/curl
+      name: curl
+      command:
+          - sleep
+          - "3600"
+      imagePullPolicy: IfNotPresent
+    restartPolicy: Always

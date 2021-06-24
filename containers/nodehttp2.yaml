@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+    name: nodehttp2
+    labels:
+        app: nodehttp2
+spec:
+    containers:
+    - image: purecap/nodehttp
+      name: nodehttp2
+      ports:
+      - containerPort: 8080
+        protocol: TCP
+      livenessProbe:
+          httpGet:
+              path: /
+              port: 8080

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+    name: nodehttp-manual
+spec:
+    containers:
+    - image: purecap/nodehttp
+      name: nodehttp
+      ports:
+      - containerPort: 8080
+        protocol: TCP

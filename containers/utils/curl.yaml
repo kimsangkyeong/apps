@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+    name: curl
+    labels:
+        app: curl
+spec:
+    containers:
+    - image: curlimages/curl
+      name: curl
+      command:
+          - sleep
+          - "3600"
+      imagePullPolicy: IfNotPresent
+    restartPolicy: Always

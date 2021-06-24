@@ -1,0 +1,15 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+    name: nodehttp2-ingress
+    annotations:
+        alb.ingress.kubernets.io/group.name: search-app-ingress
+spec:
+    rules:
+    - host: ksk.biz-think.net
+      http:
+        paths:
+        - path: /
+          backend:
+            serviceName: nodehttp2
+            servicePort: 80

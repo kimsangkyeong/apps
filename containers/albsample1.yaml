@@ -1,0 +1,60 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ingress-bugbash
+  labels:
+     tenant: test
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: ingress-bugbash
+  name: echo
+spec:
+  selector:
+    matchLabels:
+      app: echo
+  replicas: 5
+  template:
+    metadata:
+      labels:
+        app: echo
+    spec:
+      containers:
+        - name: app
+          image: gcr.io/google-containers/echoserver:1.4
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: ingress-bugbash
+  name: echo
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+  type: NodePort
+  selector:
+    app: echo
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: ingress-bugbash
+  name: echo
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /echo
+            backend:
+              serviceName: echo
+              servicePort: 80

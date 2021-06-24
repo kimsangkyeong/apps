@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+    name: nodehttporder
+spec:
+    nodeSelector:
+        node.role: Order
+    containers:
+    - image: purecap/nodehttp
+      name: nodehttporder
+      ports:
+      - containerPort: 8080
+        protocol: TCP

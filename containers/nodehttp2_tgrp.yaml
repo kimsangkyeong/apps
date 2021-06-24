@@ -1,0 +1,9 @@
+apiVersion: elbv2.k8s.aws/v1alpha1
+kind: TargetGroupBinding
+metadata:
+    name: nodehttp2filter
+spec:
+    serviceRef:
+        name: nodehttp2
+        port: 80
+    targetGroupARN: arn:aws:elasticloadbalancing:us-west-1:592806604814:targetgroup/k8s-argocd-argocdse-c49230fb5d/4775b01bb962e2f0
