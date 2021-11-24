@@ -81,7 +81,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: alexwhen/docker-2048
+          image: "gcr.io/google-samples/hello-go-gke:1.0"
           imagePullPolicy: Always
           ports:
             - containerPort: 80
