@@ -15,7 +15,7 @@ spec:
   selector:
     matchLabels:
       app: echo2
-  replicas: 5
+  replicas: 3
   template:
     metadata:
       labels:
@@ -42,7 +42,7 @@ spec:
   selector:
     app: echo2
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   namespace: ingress-bugbash
@@ -57,9 +57,12 @@ spec:
     - http:
         paths:
           - path: /echo
+            pathType: Prefix
             backend:
-              serviceName: echo2
-              servicePort: 80
+              service:
+                name: echo2
+                port:
+                  number: 80
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -70,7 +73,7 @@ spec:
   selector:
     matchLabels:
       app: game-2048
-  replicas: 5
+  replicas: 3
   template:
     metadata:
       labels:
@@ -97,7 +100,7 @@ spec:
   selector:
     app: game-2048
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   namespace: ingress-bugbash
@@ -111,7 +114,10 @@ spec:
   rules:
     - http:
         paths:
-          - path: /*
+          - path: /game
+            pathType: Prefix
             backend:
-              serviceName: game-2048
-              servicePort: 80
+              service:
+                name: game-2048
+                port:
+                  number: 80

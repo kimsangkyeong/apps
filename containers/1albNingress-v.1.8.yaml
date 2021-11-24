@@ -15,7 +15,7 @@ spec:
   selector:
     matchLabels:
       app: echo2
-  replicas: 1
+  replicas: 3
   template:
     metadata:
       labels:
@@ -52,11 +52,9 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/group.name: echo2048
     alb.ingress.kubernetes.io/group.order: '1'
-    alb.ingress.kubernetes.io/subnets: subnet-0a41aa9b13ecc4cac, subnet-06093f279c3d2f91b
 spec:
   rules:
-    - host: app1.biz-think.net
-      http:
+    - http:
         paths:
           - path: /echo
             backend:
@@ -72,7 +70,7 @@ spec:
   selector:
     matchLabels:
       app: game-2048
-  replicas: 1
+  replicas: 3
   template:
     metadata:
       labels:
@@ -109,11 +107,9 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/group.name: echo2048
     alb.ingress.kubernetes.io/group.order: '2'
-    alb.ingress.kubernetes.io/subnets: subnet-0a41aa9b13ecc4cac, subnet-06093f279c3d2f91b
 spec:
   rules:
-    - host: app2.biz-think.net
-      http:
+    - http:
         paths:
           - path: /*
             backend:
